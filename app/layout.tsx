@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import NavBar from "@/components/NavBar";
-import Footer from "@/components/Footer";
+import SiteHeader from "@/components/v2/SiteHeader";
+import SiteFooter from "@/components/v2/SiteFooter";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -21,42 +21,42 @@ const dmSans = DM_Sans({
 
 const BASE_URL = "https://vetssi.com";
 
+const DESCRIPTION =
+  "An independent educational resource for veterinary surgical teams. The Mosaic of SSI Prevention organises surgical site infection prevention into four stages and twelve core protocols, with the practices, checklists, roles and audit questions to implement them.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "VETSSI — Veterinary Surgical Site Infection Prevention",
-    template: "%s | VETSSI",
+    default: "VetSSI — The Mosaic of SSI Prevention",
+    template: "%s | VetSSI",
   },
-  description:
-    "Evidence-based protocols, expert techniques, and real-world implementation guidance for veterinary surgical site infection prevention. Built for the entire perioperative team.",
+  description: DESCRIPTION,
   keywords: [
     "veterinary surgical site infection",
     "SSI prevention",
     "veterinary surgery protocols",
     "perioperative infection control",
     "veterinary aseptic technique",
-    "orthopaedic infection prevention",
+    "SSI surveillance",
   ],
-  authors: [{ name: "VETSSI" }],
-  creator: "VETSSI",
+  authors: [{ name: "VetSSI" }],
+  creator: "VetSSI",
   verification: {
     google: "k0FA6zqwmkpSKdmfQ1e-gFIFgdFptCcSVJ5NTaVmWvI",
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_GB",
     url: BASE_URL,
-    siteName: "VETSSI",
-    title: "VETSSI — Veterinary Surgical Site Infection Prevention",
-    description:
-      "Evidence-based protocols, expert techniques, and real-world implementation guidance for veterinary surgical site infection prevention.",
+    siteName: "VetSSI",
+    title: "VetSSI — The Mosaic of SSI Prevention",
+    description: DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "VETSSI — Veterinary Surgical Site Infection Prevention",
+    title: "VetSSI — The Mosaic of SSI Prevention",
     description:
-      "Evidence-based protocols for the entire veterinary perioperative team.",
-    creator: "@vetssi",
+      "Four stages, twelve protocols, and the practices that implement them. An independent educational resource for veterinary surgical teams.",
   },
   robots: {
     index: true,
@@ -71,25 +71,19 @@ export const metadata: Metadata = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "VETSSI",
+  name: "VetSSI",
   url: BASE_URL,
-  logo: `${BASE_URL}/favicon.ico`,
   description:
-    "Evidence-based veterinary surgical site infection prevention protocols and resources.",
+    "An independent educational resource for veterinary surgical site infection prevention.",
   sameAs: [],
 };
 
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "VETSSI",
+  name: "VetSSI",
   url: BASE_URL,
-  description:
-    "Evidence-based protocols, expert techniques, and implementation guidance for veterinary SSI prevention.",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: `${BASE_URL}/protocols`,
-  },
+  description: DESCRIPTION,
 };
 
 export default function RootLayout({
@@ -100,19 +94,26 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
       <body className="min-h-screen flex flex-col font-sans">
+        <a href="#main" className="skip-link">
+          Skip to main content
+        </a>
         <Script
           id="schema-organization"
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
         />
         <Script
           id="schema-website"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
-        <NavBar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <SiteHeader />
+        <main id="main" className="flex-1">
+          {children}
+        </main>
+        <SiteFooter />
       </body>
     </html>
   );

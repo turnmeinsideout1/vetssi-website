@@ -101,15 +101,16 @@ export type PathwayKey =
   | "intraoperative-adjuncts"
   | "postoperative-care";
 
+// V2: the V1 contamination pathways became the tiles of the Mosaic.
 export const pathwayRef: Record<PathwayKey, { name: string; href: string }> = {
-  "surgical-team": { name: "Surgical Team", href: "/contamination-pathways#surgical-team" },
-  patient: { name: "Patient", href: "/contamination-pathways#patient" },
-  "or-environment": { name: "Operating Room Environment", href: "/contamination-pathways#or-environment" },
-  "sterile-field": { name: "Surgical Field Isolation", href: "/contamination-pathways#surgical-field-isolation" },
-  "implants-instruments": { name: "Instruments & Implants", href: "/contamination-pathways#instruments-implants" },
-  "surgical-technique": { name: "Surgical Technique", href: "/contamination-pathways#surgical-technique" },
-  "intraoperative-adjuncts": { name: "Intraoperative Adjuncts", href: "/contamination-pathways#intraoperative-adjuncts" },
-  "postoperative-care": { name: "Postoperative Care", href: "/contamination-pathways#postoperative-care" },
+  "surgical-team": { name: "Surgical team discipline", href: "/mosaic#tile-surgical-team" },
+  patient: { name: "Patient health", href: "/mosaic#tile-patient-health" },
+  "or-environment": { name: "Operating theatre environment", href: "/mosaic#tile-theatre-environment" },
+  "sterile-field": { name: "Surgical field isolation", href: "/mosaic#tile-field-isolation" },
+  "implants-instruments": { name: "Instrument and implant protection", href: "/mosaic#tile-instruments-implants" },
+  "surgical-technique": { name: "Surgical technique", href: "/mosaic#tile-surgical-technique" },
+  "intraoperative-adjuncts": { name: "Intraoperative adjuncts", href: "/mosaic#tile-intraoperative-adjuncts" },
+  "postoperative-care": { name: "Postoperative care", href: "/mosaic#tile-postoperative-care" },
 };
 
 export type ProtocolKey =
@@ -121,16 +122,37 @@ export type ProtocolKey =
   | "or-behavior"
   | "risk-stratification";
 
-// All seven targets resolve to real /protocols/[slug] pages that exist
-// in data/protocols.ts as of Step 0.
+// V2: all seven targets resolve to one of the twelve core protocols in
+// content/protocols, deep-linked to the practice that replaced the V1 topic.
 export const protocolRef: Record<ProtocolKey, { name: string; href: string }> = {
-  closure: { name: "Wound Management", href: "/protocols/wound-management" },
-  "implant-handling": { name: "Implant Handling", href: "/protocols/implant-handling" },
-  "sterile-field": { name: "Sterile Field Maintenance", href: "/protocols/sterile-field-maintenance" },
-  "contamination-response": { name: "Contamination Event Response", href: "/protocols/contamination-event-response" },
-  "postoperative-monitoring": { name: "Incision Monitoring", href: "/protocols/incision-monitoring" },
-  "or-behavior": { name: "OR Behavior Rules", href: "/protocols/or-behavior-rules" },
-  "risk-stratification": { name: "Patient Risk Stratification", href: "/protocols/patient-risk-stratification" },
+  closure: {
+    name: "Surgical Technique, Lavage & Closure",
+    href: "/protocols/surgical-technique-lavage-closure#practice-layered-closure",
+  },
+  "implant-handling": {
+    name: "Instruments & Implant Protection",
+    href: "/protocols/instruments-implant-protection#practice-no-touch-handling",
+  },
+  "sterile-field": {
+    name: "Surgical Field Isolation",
+    href: "/protocols/surgical-field-isolation#practice-sterile-boundaries",
+  },
+  "contamination-response": {
+    name: "Surgical Field Isolation — managing a breached field",
+    href: "/protocols/surgical-field-isolation#practice-breached-field",
+  },
+  "postoperative-monitoring": {
+    name: "Postoperative Wound Care & Patient Protection",
+    href: "/protocols/postoperative-wound-care#practice-wound-monitoring",
+  },
+  "or-behavior": {
+    name: "Aseptic OR Behaviour",
+    href: "/protocols/aseptic-or-behaviour",
+  },
+  "risk-stratification": {
+    name: "Patient Assessment & Surgical Planning",
+    href: "/protocols/patient-assessment-planning#practice-patient-risk-factors",
+  },
 };
 
 export type RoleKey =
@@ -144,12 +166,17 @@ export type RoleKey =
 // /roles is a single anchor-based page. circulating-nurse has no direct
 // anchor equivalent in the existing roles taxonomy; it falls back to /roles.
 export const roleRef: Record<RoleKey, { name: string; href: string }> = {
-  surgeon: { name: "Surgeon", href: "/roles#surgeon" },
-  "scrub-tech": { name: "Scrub Technician", href: "/roles#scrub-technician" },
-  "circulating-nurse": { name: "Circulating Nurse", href: "/roles" },
-  "anesthesia-tech": { name: "Anesthesia Technician", href: "/roles#anesthetist" },
-  "recovery-team": { name: "Recovery Team", href: "/roles#recovery-team" },
-  owner: { name: "Owner / Caregiver", href: "/roles#owner" },
+  surgeon: { name: "Surgeon", href: "/roles?role=surgeon" },
+  "scrub-tech": { name: "Scrub team", href: "/roles?role=scrub-team" },
+  "circulating-nurse": { name: "Prep team", href: "/roles?role=prep-team" },
+  "anesthesia-tech": { name: "Anaesthesia team", href: "/roles?role=anaesthesia-team" },
+  "recovery-team": { name: "Recovery team", href: "/roles?role=recovery-team" },
+  // V2 has no separate owner/caregiver role category — owner-facing
+  // responsibilities sit within the recovery team's practices in Protocol 10.
+  owner: {
+    name: "Owner education (Recovery team)",
+    href: "/protocols/postoperative-wound-care#practice-owner-education",
+  },
 };
 
 export const coreDefinitions: Definition[] = [

@@ -1,22 +1,17 @@
 import { ImageResponse } from "next/og";
-import { getProtocolBySlug } from "@/data/protocols";
+import { getProtocol } from "@/content/protocols";
+import { stageBySlug } from "@/content/stages";
+import type { StageSlug } from "@/content/types";
 
 export const runtime = "edge";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const phaseLabel: Record<string, string> = {
-  "pre-case-planning": "Pre-Case Planning",
-  preoperative: "Preoperative",
-  intraoperative: "Intraoperative",
-  postoperative: "Postoperative",
-};
-
-const phaseColor: Record<string, string> = {
-  "pre-case-planning": "#7C3AED",
-  preoperative: "#0D6E5B",
-  intraoperative: "#1A5276",
-  postoperative: "#7D5A1E",
+const stageColor: Record<StageSlug, string> = {
+  "before-surgery": "#1F5C7A",
+  "during-surgery": "#2E6E9E",
+  "after-surgery": "#46748C",
+  "measure-improve": "#6A5B8A",
 };
 
 export async function generateImageMetadata({
@@ -24,23 +19,51 @@ export async function generateImageMetadata({
 }: {
   params: { slug: string };
 }) {
-  const protocol = getProtocolBySlug(params.slug);
+  const protocol = getProtocol(params.slug);
   return [
     {
       id: params.slug,
-      alt: protocol ? `${protocol.title} — VETSSI Protocol` : "VETSSI Protocol",
+      size,
+      contentType,
+      alt: protocol
+        ? `${protocol.title} — VetSSI Protocol ${protocol.protocolNumber}`
+        : "VetSSI",
     },
   ];
 }
 
-export default function ProtocolOgImage({ params }: { params: { slug: string } }) {
-  const protocol = getProtocolBySlug(params.slug);
+export default async function Image({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const protocol = getProtocol(params.slug);
 
-  const title = protocol?.title ?? "Protocol";
-  const phase = protocol?.phase ?? "preoperative";
-  const label = phaseLabel[phase] ?? phase;
-  const color = phaseColor[phase] ?? "#2E6E9E";
-  const objective = protocol?.clinicalObjective?.split(".")[0] ?? "";
+  if (!protocol) {
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#0C2340",
+            color: "#fff",
+            fontSize: 72,
+            letterSpacing: "0.18em",
+          }}
+        >
+          VETSSI
+        </div>
+      ),
+      size,
+    );
+  }
+
+  const stage = stageBySlug[protocol.stage];
+  const accent = stageColor[protocol.stage];
 
   return new ImageResponse(
     (
@@ -51,100 +74,73 @@ export default function ProtocolOgImage({ params }: { params: { slug: string } }
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "64px 80px",
           background: "#0C2340",
+          padding: 72,
+          color: "#fff",
         }}
       >
-        {/* Grid pattern */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,0.03) 39px,rgba(255,255,255,0.03) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,0.03) 39px,rgba(255,255,255,0.03) 40px)",
-          }}
-        />
-        {/* Left bar */}
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: "6px",
-            background: "#2E6E9E",
-          }}
-        />
-        {/* Top: site + phase badge */}
-        <div style={{ display: "flex", alignItems: "center", gap: "24px", zIndex: 1 }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
-              fontSize: "16px",
-              fontWeight: 600,
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              color: "#5A9DC0",
+              display: "flex",
+              alignItems: "center",
+              gap: 16,
+              marginBottom: 40,
             }}
           >
-            VETSSI
-          </div>
-          <div
-            style={{
-              fontSize: "13px",
-              fontWeight: 600,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: color,
-              background: `${color}22`,
-              border: `1px solid ${color}55`,
-              padding: "4px 14px",
-            }}
-          >
-            {label}
-          </div>
-        </div>
-        {/* Middle: title */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px", zIndex: 1 }}>
-          <div
-            style={{
-              fontSize: title.length > 40 ? "52px" : "64px",
-              fontWeight: 600,
-              color: "#FFFFFF",
-              lineHeight: 1.1,
-              maxWidth: "960px",
-            }}
-          >
-            {title}
-          </div>
-          {objective && (
+            <div style={{ width: 20, height: 20, background: accent }} />
             <div
               style={{
-                fontSize: "20px",
-                color: "#94A3B8",
-                maxWidth: "860px",
-                lineHeight: 1.4,
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                overflow: "hidden",
+                fontSize: 24,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "#9BB4C9",
               }}
             >
-              {objective}.
+              {stage.title} · Protocol {protocol.protocolNumber} of 12
             </div>
-          )}
+          </div>
+
+          <div
+            style={{
+              fontSize: 68,
+              lineHeight: 1.1,
+              maxWidth: 960,
+              fontWeight: 500,
+            }}
+          >
+            {protocol.title}
+          </div>
+
+          <div
+            style={{
+              fontSize: 28,
+              lineHeight: 1.45,
+              color: "rgba(255,255,255,0.68)",
+              maxWidth: 900,
+              marginTop: 28,
+            }}
+          >
+            {protocol.summary}
+          </div>
         </div>
-        {/* Bottom: domain */}
+
         <div
           style={{
-            fontSize: "16px",
-            color: "#5A9DC0",
-            letterSpacing: "0.08em",
-            zIndex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderTop: "1px solid rgba(255,255,255,0.15)",
+            paddingTop: 28,
           }}
         >
-          vetssi.com/protocols
+          <div style={{ fontSize: 30, letterSpacing: "0.18em" }}>VETSSI</div>
+          <div style={{ fontSize: 22, color: "rgba(255,255,255,0.5)" }}>
+            {protocol.practices.length} practices · The Mosaic of SSI Prevention
+          </div>
         </div>
       </div>
     ),
-    { ...size }
+    size,
   );
 }

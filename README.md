@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VetSSI
 
-## Getting Started
+An independent educational resource that helps veterinary surgical teams
+translate surgical-site-infection prevention evidence into consistent everyday
+practice.
 
-First, run the development server:
+> **VetSSI Version 2 is currently under expert review. Clinical content should
+> not yet be treated as a finalized guideline.**
+
+## Running it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Next.js 14 (App Router) · TypeScript (strict) · Tailwind CSS 3 · lucide-react.
+No database, no CMS, no authentication. All content is typed data compiled into
+the build, so every page is statically generated.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## The architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+One hierarchy runs through the whole site:
 
-## Learn More
+```
+Mosaic → 4 stages → 12 protocols → 142 practices → implementation → evidence
+```
 
-To learn more about Next.js, take a look at the following resources:
+- **The Mosaic** is the framework: prevention is a set of coordinated
+  protective barriers, and every practice is one tile.
+- **Four stages** — Before Surgery (5 protocols), During Surgery (4), After
+  Surgery (1), Measure & Improve (2). The fourth is a feedback loop around the
+  other three, not a chronological phase, and the UI treats it differently.
+- **Twelve protocols**, each stating one standard.
+- **Practices** live inside protocols. They are never presented as standalone
+  protocols — that was the main problem with V1, which had 47 of them. See
+  [MIGRATION.md](MIGRATION.md).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Where the content lives
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+content/
+  types.ts              Content model. Start here.
+  stages.ts             The 4 stages
+  roles.ts              The 7 role categories
+  protocols/            One file per protocol + index.ts (aggregation)
+  references.ts         Reference library with verification status
+  glossary.ts           Glossary terms
+  mosaic.ts             Mosaic tiles
+  resources.ts          Resources (available vs planned)
+  search.ts             Search index, derived from everything above
+  redirects.mjs         V1 → V2 route map (imported by next.config.mjs)
 
-## Deploy on Vercel
+data/                   PRESERVED V1 — the SSI Definitions Framework
+components/v2/          V2 component library
+components/             PRESERVED V1 — SSI Definitions components only
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The role filter at `/roles` and the search index are both **derived from the
+protocol data**, so they cannot drift from what the protocol pages render. Add
+a practice and it appears in both automatically.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Adding or editing a protocol
+
+Edit the file in `content/protocols/`. The type system enforces the required
+fields. `content/protocols/index.ts` picks it up; routes, sitemap, search, role
+filter and OG images all follow.
+
+Practice `id`s are URL anchors (`#practice-<id>`) and are referenced by
+`content/redirects.mjs` — changing one breaks an inbound redirect from V1.
+
+## Editorial rules this codebase enforces
+
+These are not style preferences. They are the reason the site can be trusted.
+
+1. **No fabricated citations.** Every entry in `content/references.ts` carries
+   a `status`. Only sources whose full record is held in this repository and
+   resolves to a live open URL are `verified` — currently one. The other 46
+   were carried from V1 and render with a visible *pending verification*
+   marker. Do not mark anything verified without checking it against source.
+2. **No confident evidence ratings without support.** Every practice has an
+   `evidenceLevel` and an `evidenceNote` that says what it actually rests on,
+   including where evidence is absent or points the other way.
+3. **Draft content is labelled.** Any protocol with `reviewStatus: "draft"`
+   renders a visible notice. All twelve currently do.
+4. **No fake functionality.** No download buttons for files that do not exist,
+   no video players with no video. Resources are either `available` with a real
+   destination, or `planned` and labelled as such.
+5. **Checklists are not records.** Tick state is React state only. It is never
+   persisted, and the UI says so, because a checklist that looked persistent
+   could be mistaken for a medical or legal record.
+6. **Product-neutral.** No commercial product is recommended. Where product
+   instructions matter, they are kept visibly distinct from general principles.
+7. **Plain clinical language.** "Surgical site infection" is established before
+   "SSI" is used on general-audience entry pages. No claims like "eliminates
+   infection" or "guarantees sterility".
+
+## Accessibility
+
+Semantic HTML, contiguous heading levels, keyboard-operable controls (practice
+accordions are native `<details>`), a visible focus ring on every focusable
+element, a skip link, no information conveyed by colour alone, reduced-motion
+support, and no text below 11px.
+
+Checklists print on their own: **Print checklist** isolates the checklist, hides
+the rest of the page and its own buttons, and restates the protocol's standard
+on the sheet.
+
+## Testing
+
+There is no test runner in the project. Verification for the V2 rebuild was
+done with throwaway Puppeteer scripts against a production build — a link
+crawl, a redirect check, a responsive/a11y sweep (31 routes × 3 widths) and 29
+interaction tests. Results are recorded in
+[MIGRATION.md §8](MIGRATION.md#8-verification-performed). Worth making
+permanent if this moves past prototype.

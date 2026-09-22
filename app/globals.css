@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  /* Core identity, carried forward from VetSSI V1 */
   --navy:         #0C2340;
   --navy-mid:     #1A3D5C;
   --steel:        #2E6E9E;
@@ -10,95 +11,109 @@
   --cream:        #F7F5F0;
   --warm-gray:    #E8E4DC;
   --text-primary: #1A1A1A;
-  --text-muted:   #6B7280;
+  --text-muted:   #5A6270;
   --white:        #FFFFFF;
+
+  /* Stage accents. Deliberately close in value so that no stage reads as
+     more important than another, and each passes contrast on cream. */
+  --stage-before:  #1F5C7A;
+  --stage-during:  #2E6E9E;
+  --stage-after:   #46748C;
+  --stage-measure: #6A5B8A;
 }
 
 html {
   scroll-behavior: smooth;
+  /* Sticky header offset for in-page anchors. */
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {
   background-color: var(--cream);
   color: var(--text-primary);
   font-family: var(--font-dm-sans), system-ui, sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings default to serif */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-cormorant), Georgia, serif;
   font-weight: 500;
   letter-spacing: 0.01em;
 }
 
-/* Cross-hatch hero pattern */
-.hero-pattern {
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 39px,
-      rgba(255,255,255,0.04) 39px,
-      rgba(255,255,255,0.04) 40px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 39px,
-      rgba(255,255,255,0.04) 39px,
-      rgba(255,255,255,0.04) 40px
-    );
+/* ─── Focus ────────────────────────────────────────────────────────────────
+   A single visible focus style everywhere. Never removed. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--steel);
+  outline-offset: 2px;
+  border-radius: 1px;
 }
 
-/* Phase badge colors */
-.badge-pre-case-planning {
-  background-color: #EEE8F5;
-  color: #5B3A8A;
-  border: 1px solid #C4AADE;
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
 }
-.badge-preoperative {
-  background-color: #E6F4F1;
-  color: #0D6E5B;
-  border: 1px solid #A3D4CB;
-}
-.badge-intraoperative {
-  background-color: #E8F0F8;
-  color: #1A5276;
-  border: 1px solid #A9C8E4;
-}
-.badge-postoperative {
-  background-color: #FEF3E2;
-  color: #7D5A1E;
-  border: 1px solid #F0C98A;
+.skip-link:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--navy);
+  color: white;
+  font-size: 0.875rem;
 }
 
-/* Card base */
-.card {
-  background: white;
-  border-top: 2px solid var(--steel);
-  border-radius: 0;
+/* ─── Typographic utilities ───────────────────────────────────────────────── */
+.eyebrow {
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
 }
 
-/* Callout box */
-.callout-box {
-  border-left: 3px solid var(--steel);
-  background-color: rgba(90, 157, 192, 0.07);
-  padding: 1.25rem 1.5rem;
-}
-
-/* Nav link style */
 .nav-link {
   font-family: var(--font-dm-sans), system-ui, sans-serif;
   font-size: 0.75rem;
-  font-weight: 400;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
 }
 
-/* Print styles */
+/* Measure for long-form reading */
+.prose-measure {
+  max-width: 68ch;
+}
+
+/* ─── Mosaic motif ────────────────────────────────────────────────────────
+   A restrained tessellation used once, on the homepage and Mosaic page.
+   Never decorative on content pages. */
+.mosaic-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ─── Print ───────────────────────────────────────────────────────────────
+   Checklists must print cleanly on their own. */
 @media print {
   nav,
   footer,
@@ -110,29 +125,59 @@ h1, h2, h3, h4, h5, h6 {
   body {
     background: white;
     color: black;
-    font-size: 12pt;
+    font-size: 11pt;
   }
 
-  h1 {
-    font-size: 20pt;
-  }
-
-  h2 {
-    font-size: 15pt;
-  }
+  h1 { font-size: 18pt; }
+  h2 { font-size: 14pt; }
+  h3 { font-size: 12pt; }
 
   a {
     color: black;
     text-decoration: none;
   }
 
-  .protocol-content {
-    max-width: 100%;
+  /* "Print checklist" produces a point-of-care sheet rather than the whole
+     page. Hide everything, then reveal only the checklist subtree and lift it
+     to the top of the sheet. */
+  body.printing-checklist * {
+    visibility: hidden;
+  }
+  body.printing-checklist .print-keep,
+  body.printing-checklist .print-keep * {
+    visibility: visible;
+  }
+  body.printing-checklist .print-keep {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
+    border: 0;
+  }
+  body.printing-checklist .no-print-in-checklist {
+    display: none !important;
   }
 
-  .print-full-width {
-    width: 100% !important;
-    max-width: 100% !important;
+  .print-checkbox {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1.25pt solid #000;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .print-break-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  details {
+    /* Expand accordions so printed protocols are complete. */
+    display: block;
+  }
+  details > summary {
+    list-style: none;
   }
 }

@@ -1,300 +1,288 @@
-import type { Metadata } from "next";
 import Link from "next/link";
-import { Shield, Brain, Users, ArrowRight } from "lucide-react";
-import ProtocolCard from "@/components/ProtocolCard";
-import { protocols } from "@/data/protocols";
-import { pathways } from "@/data/pathways";
-import { getAllRoles } from "@/data/roles";
-import { coreDefinitions } from "@/data/ssi-definitions";
+import type { Metadata } from "next";
+import { stages } from "@/content/stages";
+import { getProtocolsByStage, protocols, practiceCount } from "@/content/protocols";
+import { mosaicTiles } from "@/content/mosaic";
+import {
+  ButtonLink,
+  Container,
+  SectionHeading,
+  stageAccent,
+} from "@/components/v2/ui";
 
 export const metadata: Metadata = {
-  title: { absolute: "VETSSI — Veterinary Surgical Site Infection Prevention" },
+  title: "VetSSI — The Mosaic of SSI Prevention",
   description:
-    "The complete perioperative SSI prevention resource for veterinary teams. Evidence-based protocols covering pre-case planning, patient preparation, surgical team standards, and postoperative care.",
+    "Surgical site infection prevention depends on multiple protective barriers applied consistently before, during and after surgery. Four stages, twelve core protocols, and the practices that implement them.",
   alternates: { canonical: "https://vetssi.com" },
-  openGraph: {
-    title: "VETSSI — Veterinary Surgical Site Infection Prevention",
-    description:
-      "Evidence-based protocols for the entire veterinary perioperative team — from pre-case planning to postoperative surveillance.",
-    url: "https://vetssi.com",
-  },
 };
 
+const whatEachProtocolProvides = [
+  {
+    title: "A clear standard",
+    body: "One statement of what VetSSI considers good practice, written so a hospital can compare it directly with what it currently does.",
+  },
+  {
+    title: "Individual practices",
+    body: "The specific actions inside the protocol, each with a recommended action, implementation steps and the ways it commonly fails.",
+  },
+  {
+    title: "Role ownership",
+    body: "Who performs each practice, who oversees it and who supports it — so no step is left without an owner.",
+  },
+  {
+    title: "A team checklist",
+    body: "A short checklist drawn from the protocol's own practices, usable at the point of care and printable on its own.",
+  },
+  {
+    title: "Evidence and rationale",
+    body: "What the recommendation rests on, classified honestly, including where the evidence is limited or absent.",
+  },
+  {
+    title: "Audit questions",
+    body: "Three to six things an observer can actually look at, to find the gap between the written protocol and daily practice.",
+  },
+];
+
 export default function HomePage() {
-  // One card per phase for the featured section
-  const featuredProtocols = [
-    protocols.find((p) => p.phase === "preoperative")!,
-    protocols.find((p) => p.phase === "intraoperative")!,
-    protocols.find((p) => p.phase === "postoperative")!,
-  ];
-
-  const roles = getAllRoles();
-
   return (
     <>
-      {/* ─── Hero ─── */}
-      <section className="hero-pattern bg-navy text-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24 md:py-32">
+      {/* ─── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="bg-navy text-white mosaic-grid-bg">
+        <Container className="py-20 sm:py-28">
           <div className="max-w-3xl">
-            <p className="nav-link text-steel-light mb-6 tracking-widest">
-              VETSSI — Veterinary Surgical Site Infection Prevention Hub
+            <p className="eyebrow text-steel-light mb-5">
+              An independent educational resource for veterinary surgical teams
             </p>
-            <h1
-              className="font-serif text-4xl md:text-6xl font-medium leading-tight mb-6"
-              style={{ letterSpacing: "-0.01em" }}
-            >
-              Surgical Site Infection Prevention in Veterinary Surgery
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.1] mb-6">
+              The Mosaic of SSI Prevention
             </h1>
-            <p className="text-lg md:text-xl text-white/70 font-light leading-relaxed mb-10 max-w-2xl">
-              Evidence-based protocols. Expert techniques. Real-world implementation.
+            <p className="text-xl sm:text-2xl font-serif text-white/90 leading-snug mb-6">
+              Preventing surgical site infection takes more than one
+              intervention.
             </p>
-            <div className="flex flex-wrap gap-4">
+            <p className="text-base sm:text-lg text-white/70 leading-relaxed max-w-2xl mb-10">
+              Surgical site infection prevention depends on multiple protective
+              barriers applied consistently before, during, and after
+              surgery&mdash;and on measuring performance so that practice can
+              continue to improve.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                href="/protocols"
-                className="inline-flex items-center gap-2 bg-steel hover:bg-steel-light text-white px-7 py-3.5 text-sm font-medium nav-link transition-colors"
+                href="/pathway/before-surgery"
+                className="inline-flex items-center justify-center gap-2 bg-white text-navy px-6 py-3.5 text-sm font-medium hover:bg-cream transition-colors"
               >
-                Explore Protocols
-                <ArrowRight size={14} />
+                Explore the Prevention Pathway
               </Link>
               <Link
-                href="/videos"
-                className="inline-flex items-center gap-2 border border-white/40 hover:border-white text-white px-7 py-3.5 text-sm font-medium nav-link transition-colors"
+                href="/mosaic"
+                className="inline-flex items-center justify-center gap-2 border border-white/30 text-white px-6 py-3.5 text-sm font-medium hover:bg-white/10 transition-colors"
               >
-                View Surgical Techniques
+                Understand the Mosaic
               </Link>
             </div>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* ─── Mission Strip ─── */}
-      <section className="bg-white border-b border-warm-gray">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div className="flex flex-col items-start">
-              <div className="w-10 h-10 flex items-center justify-center bg-cream border border-warm-gray mb-5">
-                <Shield size={20} className="text-steel" />
-              </div>
-              <h3 className="font-serif text-xl font-medium text-navy mb-2">Evidence-Based</h3>
-              <p className="text-sm text-text-muted leading-relaxed">
-                Built on peer-reviewed veterinary surgical literature, graded by evidence quality and clinical applicability.
-              </p>
-            </div>
+      {/* ─── Pathway overview ─────────────────────────────────────────────── */}
+      <section className="py-16 sm:py-24 border-b border-warm-gray">
+        <Container>
+          <SectionHeading
+            eyebrow="The prevention pathway"
+            title="Four stages, twelve core protocols"
+            lead="Three stages follow the patient through surgery. The fourth surrounds all of them: without surveillance and audit, a hospital cannot tell whether any of the others are working."
+          />
 
-            <div className="flex flex-col items-start">
-              <div className="w-10 h-10 flex items-center justify-center bg-cream border border-warm-gray mb-5">
-                <Brain size={20} className="text-steel" />
-              </div>
-              <h3 className="font-serif text-xl font-medium text-navy mb-2">Systems Thinking</h3>
-              <p className="text-sm text-text-muted leading-relaxed">
-                SSI prevention is multi-factorial, not a single intervention. This platform addresses all domains of the surgical pathway.
-              </p>
-            </div>
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {stages.map((stage) => {
+              const stageProtocols = getProtocolsByStage(stage.slug);
+              return (
+                <article
+                  key={stage.slug}
+                  className={`bg-white border border-warm-gray border-t-[3px] ${
+                    stage.kind === "loop"
+                      ? "border-t-stage-measure"
+                      : stage.slug === "before-surgery"
+                        ? "border-t-stage-before"
+                        : stage.slug === "during-surgery"
+                          ? "border-t-stage-during"
+                          : "border-t-stage-after"
+                  } flex flex-col`}
+                >
+                  <div className="p-5 flex-1 flex flex-col">
+                    <div className="flex items-baseline justify-between gap-2 mb-3">
+                      <h3 className="font-serif text-2xl text-navy leading-tight">
+                        {stage.title}
+                      </h3>
+                      <span
+                        className={`eyebrow ${stageAccent[stage.slug]} whitespace-nowrap`}
+                      >
+                        {stageProtocols.length}{" "}
+                        {stageProtocols.length === 1 ? "protocol" : "protocols"}
+                      </span>
+                    </div>
 
-            <div className="flex flex-col items-start">
-              <div className="w-10 h-10 flex items-center justify-center bg-cream border border-warm-gray mb-5">
-                <Users size={20} className="text-steel" />
-              </div>
-              <h3 className="font-serif text-xl font-medium text-navy mb-2">Expert-Driven</h3>
-              <p className="text-sm text-text-muted leading-relaxed">
-                Developed and reviewed by leading veterinary surgeons with decades of clinical experience in SSI prevention.
-              </p>
-            </div>
+                    {stage.kind === "loop" ? (
+                      <p className="eyebrow text-text-muted mb-3">
+                        Feedback loop — not a phase
+                      </p>
+                    ) : null}
+
+                    <p className="text-sm text-text-muted leading-relaxed mb-5">
+                      {stage.tagline}
+                    </p>
+
+                    <ol className="space-y-2 mb-6 flex-1">
+                      {stageProtocols.map((p) => (
+                        <li key={p.slug} className="flex gap-2.5 text-sm">
+                          <span className="text-text-muted tabular-nums shrink-0">
+                            {p.protocolNumber}.
+                          </span>
+                          <Link
+                            href={`/protocols/${p.slug}`}
+                            className="text-navy hover:text-steel underline-offset-2 hover:underline leading-snug"
+                          >
+                            {p.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ol>
+
+                    <Link
+                      href={`/pathway/${stage.slug}`}
+                      className="text-sm font-medium text-steel hover:text-navy transition-colors inline-flex items-center gap-1.5 mt-auto"
+                    >
+                      Explore {stage.title}
+                      <span aria-hidden="true">→</span>
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* ─── Featured Protocols ─── */}
-      <section className="bg-cream border-b border-warm-gray">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-          <div className="flex items-end justify-between mb-10">
+      {/* ─── Mosaic explanation ───────────────────────────────────────────── */}
+      <section className="py-16 sm:py-24 border-b border-warm-gray">
+        <Container>
+          <div className="grid lg:grid-cols-[1fr,1.1fr] gap-12 lg:gap-16 items-start">
             <div>
-              <p className="nav-link text-steel mb-2">By Phase of Care</p>
-              <h2 className="font-serif text-3xl md:text-4xl font-medium text-navy">
-                Prevention Protocols
-              </h2>
+              <SectionHeading
+                eyebrow="The framework"
+                title="Every practice is one tile"
+              />
+              <div className="space-y-4 text-text-primary leading-relaxed prose-measure">
+                <p>
+                  Surgical site infection can follow from several different
+                  sources of contamination, and from patient, procedural,
+                  environmental and team-related factors that interact with each
+                  other. No single intervention addresses all of them.
+                </p>
+                <p>
+                  That is what the Mosaic describes. Every individual practice
+                  is one tile. No tile is sufficient by itself, and the strength
+                  of the whole comes from applying them consistently across the
+                  perioperative pathway rather than from any one being done
+                  exceptionally well.
+                </p>
+                <p className="text-text-muted">
+                  The Mosaic is a way of organising prevention. It does not
+                  imply that every tile rests on the same weight of evidence
+                  &mdash; and this site says, for each one, what it actually
+                  rests on.
+                </p>
+              </div>
+              <div className="mt-8">
+                <ButtonLink href="/mosaic" variant="secondary">
+                  Understand the Mosaic
+                </ButtonLink>
+              </div>
             </div>
-            <Link
-              href="/protocols"
-              className="hidden md:inline-flex items-center gap-1.5 text-steel text-sm font-medium hover:text-navy transition-colors"
-            >
-              View All Protocols
-              <ArrowRight size={14} />
-            </Link>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredProtocols.map((protocol) => (
-              <ProtocolCard key={protocol.slug} protocol={protocol} />
+            {/* Restrained tile grid: the motif appears once, here. */}
+            <ul className="grid grid-cols-2 gap-px bg-warm-gray border border-warm-gray">
+              {mosaicTiles.map((tile) => (
+                <li key={tile.slug} className="bg-white">
+                  <Link
+                    href={`/mosaic#tile-${tile.slug}`}
+                    className="block px-4 py-5 h-full hover:bg-cream transition-colors group"
+                  >
+                    <span className="block font-serif text-lg text-navy leading-snug group-hover:text-steel transition-colors">
+                      {tile.name}
+                    </span>
+                    <span className="block text-xs text-text-muted mt-1.5">
+                      {tile.protocols.length}{" "}
+                      {tile.protocols.length === 1 ? "protocol" : "protocols"}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </section>
+
+      {/* ─── Practical implementation ─────────────────────────────────────── */}
+      <section className="py-16 sm:py-24 border-b border-warm-gray">
+        <Container>
+          <SectionHeading
+            eyebrow="How the protocols work"
+            title="Built to be implemented, not just read"
+            lead={`Each of the twelve protocols follows the same structure, so a team always knows where to find what it needs. Across them there are ${practiceCount} individual practices.`}
+          />
+
+          <ul className="grid gap-px bg-warm-gray border border-warm-gray sm:grid-cols-2 lg:grid-cols-3">
+            {whatEachProtocolProvides.map((item) => (
+              <li key={item.title} className="bg-white p-6">
+                <h3 className="font-serif text-xl text-navy mb-2 leading-snug">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-text-muted leading-relaxed">
+                  {item.body}
+                </p>
+              </li>
             ))}
-          </div>
+          </ul>
 
-          <div className="mt-8 md:hidden">
-            <Link
-              href="/protocols"
-              className="inline-flex items-center gap-1.5 text-steel text-sm font-medium hover:text-navy transition-colors"
-            >
-              View All Protocols <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Contamination Pathways Teaser ─── */}
-      <section className="bg-navy-mid text-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-          <div className="max-w-3xl">
-            <p className="nav-link text-steel-light mb-4">Contamination Pathways</p>
-            <h2 className="font-serif text-3xl md:text-4xl font-medium mb-5 leading-tight">
-              SSI Prevention Is Not One Thing
-            </h2>
-            <p className="text-white/70 font-light leading-relaxed mb-8 text-base">
-              Surgical site infections arise from eight distinct pathways — from the surgical team and patient,
-              through the operating room environment, the sterile field, instruments and implants, surgical
-              technique, intraoperative adjuncts, and postoperative care. No single intervention prevents SSI in
-              isolation. Each pathway has its own protocols and its own owners.
-            </p>
-
-            {/* Pathway pills */}
-            <div className="flex flex-wrap gap-3 mb-10">
-              {pathways.map((p) => (
-                <Link
-                  key={p.slug}
-                  href={`/contamination-pathways#${p.slug}`}
-                  className="px-4 py-2 border border-white/20 text-sm text-white/80 bg-white/5 hover:bg-white/10 hover:border-white/40 transition-colors"
-                >
-                  {p.name}
-                </Link>
-              ))}
-            </div>
-
-            <Link
-              href="/contamination-pathways"
-              className="inline-flex items-center gap-2 text-steel-light hover:text-white text-sm font-medium nav-link transition-colors"
-            >
-              Explore Contamination Pathways
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Roles Teaser ─── */}
-      <section className="bg-white border-b border-warm-gray">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-          <div className="max-w-3xl">
-            <p className="nav-link text-steel mb-4">Team Responsibilities</p>
-            <h2 className="font-serif text-3xl md:text-4xl font-medium text-navy mb-5 leading-tight">
-              SSI Prevention Is a Team Sport
-            </h2>
-            <p className="text-text-primary font-light leading-relaxed mb-8 text-base">
-              Prevention is distributed across the surgical team — surgeon, anesthetist, prep
-              technician, scrub technician, recovery team, and owner. Each role owns its own
-              control points, critical moments, and characteristic failure modes.
-            </p>
-
-            {/* Role pills */}
-            <div className="flex flex-wrap gap-3 mb-10">
-              {roles.map((r) => (
-                <Link
-                  key={r.slug}
-                  href={`/roles#${r.slug}`}
-                  className="px-4 py-2 border border-warm-gray text-sm text-steel bg-white hover:bg-cream hover:border-steel transition-colors"
-                >
-                  {r.title.split(" / ")[0]}
-                </Link>
-              ))}
-            </div>
-
+          <p className="mt-8 text-sm text-text-muted prose-measure">
+            Implementation guidance sits inside each practice, and{" "}
             <Link
               href="/roles"
-              className="inline-flex items-center gap-2 text-steel hover:text-navy text-sm font-medium nav-link transition-colors"
+              className="text-steel underline underline-offset-2"
             >
-              Explore Roles &amp; Responsibilities
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
+              every practice can be filtered by role
+            </Link>{" "}
+            so each member of the team can see their own responsibilities across
+            the whole pathway.
+          </p>
+        </Container>
       </section>
 
-      {/* ─── SSI Definitions Teaser ─── */}
-      <section className="bg-cream border-b border-warm-gray">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-          <div className="max-w-3xl">
-            <p className="nav-link text-steel mb-4">A Shared Clinical Language</p>
-            <h2 className="font-serif text-3xl md:text-4xl font-medium text-navy mb-5 leading-tight">
-              SSI Definitions Framework
-            </h2>
-            <p className="text-text-primary font-light leading-relaxed mb-8 text-base">
-              Five tissue-layer SSI definitions, surgical wound classification, and a 30-day
-              surveillance framework — derived from the 2026 AJVR expert consensus and wired into
-              every protocol, pathway, and role on this site.
-            </p>
-
-            {/* Core definition pills */}
-            <div className="flex flex-wrap gap-3 mb-6">
-              {coreDefinitions.map((d) => (
-                <Link
-                  key={d.slug}
-                  href={`/ssi-definitions/core/${d.slug}`}
-                  className="px-4 py-2 border border-warm-gray text-sm text-steel bg-white hover:bg-warm-gray hover:border-steel transition-colors"
-                >
-                  {d.short}
-                </Link>
-              ))}
-            </div>
-
-            {/* Secondary section links */}
-            <div className="flex flex-wrap gap-x-5 gap-y-2 mb-10 text-sm">
+      {/* ─── Closing CTA ──────────────────────────────────────────────────── */}
+      <section className="py-16 sm:py-24">
+        <Container>
+          <div className="bg-navy text-white p-8 sm:p-12 lg:p-16">
+            <div className="max-w-2xl">
+              <h2 className="font-serif text-3xl sm:text-4xl leading-tight mb-5">
+                Start with one part of your surgical pathway.
+              </h2>
+              <p className="text-white/70 leading-relaxed mb-8">
+                A hospital does not need to revise everything at once. Select a
+                protocol, compare it with current practice, and identify the
+                next practical improvement. The audit questions at the end of
+                each protocol are written for exactly that purpose.
+              </p>
               <Link
-                href="/ssi-definitions/wound-classification"
-                className="inline-flex items-center gap-1.5 text-steel hover:text-navy transition-colors"
+                href="/protocols"
+                className="inline-flex items-center justify-center gap-2 bg-white text-navy px-6 py-3.5 text-sm font-medium hover:bg-cream transition-colors"
               >
-                Wound Classification
-                <ArrowRight size={12} />
-              </Link>
-              <Link
-                href="/ssi-definitions/surveillance"
-                className="inline-flex items-center gap-1.5 text-steel hover:text-navy transition-colors"
-              >
-                Surveillance Framework
-                <ArrowRight size={12} />
+                View All {protocols.length} Protocols
               </Link>
             </div>
-
-            <Link
-              href="/ssi-definitions"
-              className="inline-flex items-center gap-2 text-steel hover:text-navy text-sm font-medium nav-link transition-colors"
-            >
-              Explore SSI Definitions
-              <ArrowRight size={14} />
-            </Link>
           </div>
-        </div>
-      </section>
-
-      {/* ─── Expert Contributors CTA ─── */}
-      <section className="bg-white border-b border-warm-gray">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-          <div className="max-w-3xl">
-            <p className="nav-link text-steel mb-4">Expert Network</p>
-            <h2 className="font-serif text-3xl md:text-4xl font-medium text-navy mb-5 leading-tight">
-              Expert Contributors
-            </h2>
-            <p className="text-text-primary font-light leading-relaxed mb-8 text-base">
-              VETSSI is built and reviewed by veterinary surgeons and infection-control specialists
-              whose clinical and research work underpins the protocols, definitions, and surveillance
-              framework on this site.
-            </p>
-            <Link
-              href="/contributors"
-              className="inline-flex items-center gap-2 bg-navy text-white px-7 py-3.5 text-sm font-medium hover:bg-navy-mid transition-colors"
-            >
-              View All Contributors
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
+        </Container>
       </section>
     </>
   );

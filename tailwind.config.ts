@@ -5,6 +5,7 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./content/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -16,11 +17,20 @@ const config: Config = {
         cream:          "#F7F5F0",
         "warm-gray":    "#E8E4DC",
         "text-primary": "#1A1A1A",
-        "text-muted":   "#6B7280",
+        "text-muted":   "#5A6270",
+        stage: {
+          before:  "#1F5C7A",
+          during:  "#2E6E9E",
+          after:   "#46748C",
+          measure: "#6A5B8A",
+        },
       },
       fontFamily: {
         serif: ["var(--font-cormorant)", "Georgia", "serif"],
         sans:  ["var(--font-dm-sans)", "system-ui", "sans-serif"],
+      },
+      maxWidth: {
+        measure: "68ch",
       },
     },
   },
