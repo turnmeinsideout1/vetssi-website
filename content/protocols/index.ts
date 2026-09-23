@@ -29,8 +29,75 @@ export const protocols: Protocol[] = [
   auditReviewImprovement,
 ];
 
+/**
+ * Practice groups drive what the protocol page renders, so a practice left out
+ * of every group would silently disappear and a typo'd id would render an
+ * empty row. Both are caught here, at module load, which means the build fails
+ * rather than shipping a protocol with missing content.
+ */
+function validatePracticeGroups(): void {
+  for (const protocol of protocols) {
+    if (!protocol.practiceGroups) continue;
+
+    const practiceIds = protocol.practices.map((p) => p.id);
+    const grouped = protocol.practiceGroups.flatMap((g) => g.practices);
+
+    const unknown = grouped.filter((id) => !practiceIds.includes(id));
+    if (unknown.length) {
+      throw new Error(
+        `Protocol "${protocol.slug}": practiceGroups reference unknown practice ids: ${unknown.join(", ")}`,
+      );
+    }
+
+    const ungrouped = practiceIds.filter((id) => !grouped.includes(id));
+    if (ungrouped.length) {
+      throw new Error(
+        `Protocol "${protocol.slug}": these practices are in no group and would not render: ${ungrouped.join(", ")}`,
+      );
+    }
+
+    const seen: string[] = [];
+    const duplicates: string[] = [];
+    for (const id of grouped) {
+      if (seen.includes(id)) {
+        if (!duplicates.includes(id)) duplicates.push(id);
+      } else {
+        seen.push(id);
+      }
+    }
+    if (duplicates.length) {
+      throw new Error(
+        `Protocol "${protocol.slug}": practices appear in more than one group: ${duplicates.join(", ")}`,
+      );
+    }
+  }
+}
+
+validatePracticeGroups();
+
 export function getProtocol(slug: string): Protocol | undefined {
   return protocols.find((p) => p.slug === slug);
+}
+
+/**
+ * Practices in display order — group order when groups are defined, otherwise
+ * the protocol's own array order. Used by the protocol page and by anything
+ * that needs to mirror what a reader actually sees.
+ */
+export function getOrderedPractices(protocol: Protocol): {
+  group: { id: string; title: string; summary?: string } | null;
+  practices: Protocol["practices"];
+}[] {
+  if (!protocol.practiceGroups) {
+    return [{ group: null, practices: protocol.practices }];
+  }
+  const byId = new Map(protocol.practices.map((p) => [p.id, p]));
+  return protocol.practiceGroups.map((group) => ({
+    group: { id: group.id, title: group.title, summary: group.summary },
+    practices: group.practices
+      .map((id) => byId.get(id))
+      .filter((p): p is Protocol["practices"][number] => Boolean(p)),
+  }));
 }
 
 export function getProtocolsByStage(stage: StageSlug): Protocol[] {

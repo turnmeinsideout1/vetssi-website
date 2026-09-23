@@ -23,6 +23,54 @@ export const auditReviewImprovement: Protocol = {
   reviewTimeMinutes: 10,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "standard",
+      title: "Know your standard",
+      summary:
+        "What the practice has written down, and whether people can actually do it.",
+      practices: [
+        "protocol-review",
+        "staff-competency",
+      ],
+    },
+    {
+      id: "observe",
+      title: "Observe and measure",
+      summary:
+        "Self-reported compliance consistently exceeds observed compliance.",
+      practices: [
+        "observational-audit",
+        "checklist-compliance",
+        "environmental-monitoring",
+      ],
+    },
+    {
+      id: "record",
+      title: "Record what goes wrong",
+      summary:
+        "Near misses are more numerous and more informative than infections.",
+      practices: [
+        "contamination-documentation",
+        "near-miss-reporting",
+        "morbidity-mortality-review",
+      ],
+    },
+    {
+      id: "change",
+      title: "Change, and check it worked",
+      summary:
+        "Any change is a hypothesis until it is re-measured.",
+      practices: [
+        "briefing-debriefing-findings",
+        "corrective-action",
+        "staff-education",
+        "reassessment-after-change",
+        "periodic-revision",
+        "leadership-accountability",
+      ],
+    },
+  ],
   practices: [
     {
       id: "protocol-review",

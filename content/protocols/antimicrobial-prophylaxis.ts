@@ -23,6 +23,42 @@ export const antimicrobialProphylaxis: Protocol = {
   reviewTimeMinutes: 9,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "decide",
+      title: "Decide whether, and what",
+      summary:
+        "Prophylaxis is not automatic. These practices establish whether it is indicated and which agent fits.",
+      practices: [
+        "indication",
+        "agent-selection",
+        "patient-considerations",
+        "local-resistance",
+      ],
+    },
+    {
+      id: "deliver",
+      title: "Deliver it correctly",
+      summary:
+        "Timing is the variable that determines whether prophylaxis does anything at all.",
+      practices: [
+        "dose",
+        "timing",
+        "redosing",
+      ],
+    },
+    {
+      id: "stop-and-record",
+      title: "Stop it, and record it",
+      summary:
+        "Prophylaxis ends with the procedure unless there is a recorded reason otherwise.",
+      practices: [
+        "discontinuation",
+        "postoperative-stewardship",
+        "documentation",
+      ],
+    },
+  ],
   practices: [
     {
       id: "indication",

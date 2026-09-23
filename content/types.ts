@@ -137,6 +137,27 @@ export type ResourceRef = {
   id: string;
 };
 
+/**
+ * A labelled cluster of practices within a protocol.
+ *
+ * Grouping is presentational: it breaks a long run of practices into a few
+ * scannable clusters without merging them. Each practice keeps its own
+ * evidence level, roles, references and URL anchor, because those genuinely
+ * differ between practices that sit in the same cluster.
+ *
+ * Group order defines display order, so the `practices` arrays are the single
+ * source of truth for sequence. Every practice in a protocol must appear in
+ * exactly one group — validated at module load in content/protocols/index.ts.
+ */
+export type PracticeGroup = {
+  id: string;
+  title: string;
+  /** One line explaining what the cluster covers. */
+  summary?: string;
+  /** Practice ids, in display order. */
+  practices: string[];
+};
+
 export type Protocol = {
   slug: string;
   /** 1-12, stable and displayed throughout the site. */
@@ -151,6 +172,12 @@ export type Protocol = {
   standard: string;
   roles: RoleAssignment[];
   practices: Practice[];
+  /**
+   * Optional labelled clusters over `practices`. When present the protocol
+   * page renders grouped and the groups define display order; when absent it
+   * renders the flat `practices` array in its own order.
+   */
+  practiceGroups?: PracticeGroup[];
   checklist: ChecklistItem[];
   evidenceSummary: string;
   /** Overall classification for the protocol as a whole. */

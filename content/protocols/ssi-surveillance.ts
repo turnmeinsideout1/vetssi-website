@@ -24,6 +24,53 @@ export const ssiSurveillance: Protocol = {
   reviewTimeMinutes: 12,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "agree",
+      title: "Agree what you are counting",
+      summary:
+        "Rates cannot be compared unless everyone is using the same definitions.",
+      practices: [
+        "standard-definitions",
+        "wound-classification",
+        "surveillance-period",
+      ],
+    },
+    {
+      id: "capture",
+      title: "Capture every case",
+      summary:
+        "A rate is only as good as the cases that reach the log.",
+      practices: [
+        "case-tracking",
+        "follow-up-process",
+        "infection-classification",
+      ],
+    },
+    {
+      id: "calculate",
+      title: "Calculate the rates",
+      summary:
+        "The number underneath matters as much as the number on top.",
+      practices: [
+        "denominator",
+        "overall-rate",
+        "procedure-specific-rates",
+        "implant-infections",
+      ],
+    },
+    {
+      id: "act",
+      title: "Act on what you find",
+      summary:
+        "Surveillance that nobody sees does not change anything.",
+      practices: [
+        "culture-susceptibility",
+        "internal-reporting",
+        "definitions-module",
+      ],
+    },
+  ],
   practices: [
     {
       id: "standard-definitions",

@@ -24,6 +24,41 @@ export const surgicalFieldIsolation: Protocol = {
   reviewTimeMinutes: 11,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "establish",
+      title: "Establish the barrier",
+      summary:
+        "Creating a boundary between the operative site and everything else.",
+      practices: [
+        "limb-site-isolation",
+        "draping-sequence",
+        "contamination-prone-anatomy",
+        "adhesive-drapes",
+      ],
+    },
+    {
+      id: "maintain",
+      title: "Maintain it",
+      summary:
+        "Barriers fail quietly. These practices are about noticing.",
+      practices: [
+        "sterile-boundaries",
+        "drape-lift",
+        "avoiding-skin-contact",
+      ],
+    },
+    {
+      id: "respond",
+      title: "Respond when it fails",
+      summary:
+        "What the team does about a breach, decided before one happens.",
+      practices: [
+        "breached-field",
+        "scalpel-blade-change",
+      ],
+    },
+  ],
   practices: [
     {
       id: "limb-site-isolation",

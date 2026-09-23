@@ -23,6 +23,51 @@ export const surgicalTeamPreparation: Protocol = {
   reviewTimeMinutes: 9,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "hands",
+      title: "Hands",
+      summary:
+        "The most direct route from a person to a wound.",
+      practices: [
+        "routine-hand-hygiene",
+        "surgical-hand-preparation",
+        "nails-jewellery",
+      ],
+    },
+    {
+      id: "attire",
+      title: "Attire",
+      summary:
+        "Conventional and near-universal, though the evidence for each element varies.",
+      practices: [
+        "or-attire",
+        "hair-covering",
+        "masks",
+      ],
+    },
+    {
+      id: "gowning-gloving",
+      title: "Gowning and gloving",
+      summary:
+        "Establishing the sterile barrier on the people who will be closest to the wound.",
+      practices: [
+        "gowning",
+        "gloving",
+        "glove-integrity",
+      ],
+    },
+    {
+      id: "reliability",
+      title: "Keeping it reliable",
+      summary:
+        "What turns individual habit into a standard the whole team meets.",
+      practices: [
+        "pre-field-behaviour",
+        "training-competency",
+      ],
+    },
+  ],
   practices: [
     {
       id: "routine-hand-hygiene",

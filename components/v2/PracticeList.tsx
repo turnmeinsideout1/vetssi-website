@@ -5,17 +5,87 @@ import { EvidenceBadge, RoleChip } from "./ui";
 /**
  * Practices are rendered as native <details> elements: keyboard accessible
  * without any JavaScript, expandable, and printed expanded.
+ *
+ * Where a protocol defines practice groups, they are rendered as labelled
+ * clusters. Numbering runs continuously across the whole protocol regardless
+ * of grouping, so "practice 07" means the same thing everywhere.
  */
 export default function PracticeList({
-  practices,
+  groups,
   protocolShortTitle,
 }: {
-  practices: Practice[];
+  groups: {
+    group: { id: string; title: string; summary?: string } | null;
+    practices: Practice[];
+  }[];
   protocolShortTitle: string;
 }) {
+  let runningIndex = 0;
+
+  return (
+    <div>
+      {groups.map(({ group, practices }) => {
+        const startIndex = runningIndex;
+        runningIndex += practices.length;
+        return (
+          <section
+            key={group?.id ?? "all"}
+            aria-labelledby={group ? `group-${group.id}` : undefined}
+            className="mb-10 last:mb-0"
+          >
+            {group ? (
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-3">
+                <h3
+                  id={`group-${group.id}`}
+                  className="font-serif text-2xl text-navy leading-tight"
+                >
+                  {group.title}
+                </h3>
+                <span className="text-xs text-text-muted tabular-nums">
+                  {practices.length}{" "}
+                  {practices.length === 1 ? "practice" : "practices"}
+                </span>
+              </div>
+            ) : null}
+            {group?.summary ? (
+              <p className="text-sm text-text-muted leading-relaxed prose-measure mb-4">
+                {group.summary}
+              </p>
+            ) : null}
+            <PracticeRows
+              practices={practices}
+              startIndex={startIndex}
+              headingLevel={group ? 4 : 3}
+            />
+          </section>
+        );
+      })}
+      <p className="sr-only">
+        End of practices for {protocolShortTitle}.
+      </p>
+    </div>
+  );
+}
+
+function PracticeRows({
+  practices,
+  startIndex,
+  headingLevel,
+}: {
+  practices: Practice[];
+  startIndex: number;
+  headingLevel: 3 | 4;
+}) {
+  // Keeps the document outline contiguous: h3 when the practices sit directly
+  // under the section h2, h4 when a group heading (h3) sits between.
+  const Heading = headingLevel === 3 ? "h3" : "h4";
+  const SubHeading = headingLevel === 3 ? "h4" : "h5";
+
   return (
     <div className="border-t border-warm-gray">
-      {practices.map((practice, index) => (
+      {practices.map((practice, i) => {
+        const index = startIndex + i;
+        return (
         <details
           key={practice.id}
           id={`practice-${practice.id}`}
@@ -29,11 +99,9 @@ export default function PracticeList({
               {String(index + 1).padStart(2, "0")}
             </span>
             <span className="flex-1 min-w-0">
-              {/* h3 keeps the document outline contiguous: the Practices
-                  section is an h2, and the sub-blocks below are h4. */}
-              <h3 className="font-serif text-lg sm:text-xl text-navy leading-snug">
+              <Heading className="font-serif text-lg sm:text-xl text-navy leading-snug">
                 {practice.title}
-              </h3>
+              </Heading>
               <span className="block text-sm text-text-muted mt-1 leading-relaxed">
                 {practice.summary}
               </span>
@@ -49,14 +117,14 @@ export default function PracticeList({
           <div className="px-4 sm:px-6 pb-8 pt-2 sm:pl-16">
             <div className="prose-measure space-y-6">
               <div>
-                <h4 className="eyebrow text-steel mb-2">Recommended action</h4>
+                <SubHeading className="eyebrow text-steel mb-2">Recommended action</SubHeading>
                 <p className="text-base text-text-primary leading-relaxed">
                   {practice.recommendedAction}
                 </p>
               </div>
 
               <div>
-                <h4 className="eyebrow text-steel mb-2">How to implement it</h4>
+                <SubHeading className="eyebrow text-steel mb-2">How to implement it</SubHeading>
                 <ol className="space-y-2">
                   {practice.implementationSteps.map((step, i) => (
                     <li key={i} className="flex gap-3 text-sm leading-relaxed">
@@ -70,9 +138,9 @@ export default function PracticeList({
               </div>
 
               <div>
-                <h4 className="eyebrow text-steel mb-2">
+                <SubHeading className="eyebrow text-steel mb-2">
                   Common failure points
-                </h4>
+                </SubHeading>
                 <ul className="space-y-2">
                   {practice.commonFailurePoints.map((point, i) => (
                     <li key={i} className="flex gap-3 text-sm leading-relaxed">
@@ -86,7 +154,7 @@ export default function PracticeList({
               </div>
 
               <div>
-                <h4 className="eyebrow text-steel mb-2">Who is involved</h4>
+                <SubHeading className="eyebrow text-steel mb-2">Who is involved</SubHeading>
                 <ul className="flex flex-wrap gap-2 list-none">
                   {practice.roles.map((assignment) => (
                     <li key={assignment.role}>
@@ -101,7 +169,7 @@ export default function PracticeList({
               </div>
 
               <div className="border-t border-warm-gray pt-5">
-                <h4 className="eyebrow text-steel mb-2">Evidence</h4>
+                <SubHeading className="eyebrow text-steel mb-2">Evidence</SubHeading>
                 <div className="mb-3">
                   <EvidenceBadge level={practice.evidenceLevel} />
                 </div>
@@ -111,9 +179,9 @@ export default function PracticeList({
 
                 {practice.references?.length ? (
                   <div className="mt-4">
-                    <h5 className="eyebrow text-text-muted mb-2">
+                    <p className="eyebrow text-text-muted mb-2">
                       References
-                    </h5>
+                    </p>
                     <ul className="space-y-1.5">
                       {getReferences(practice.references).map((ref) => (
                         <li
@@ -148,7 +216,7 @@ export default function PracticeList({
 
               {practice.media?.length ? (
                 <div className="border-t border-warm-gray pt-5 no-print">
-                  <h4 className="eyebrow text-steel mb-3">Media</h4>
+                  <SubHeading className="eyebrow text-steel mb-3">Media</SubHeading>
                   <ul className="space-y-2">
                     {practice.media.map((item, i) => (
                       <li
@@ -174,10 +242,8 @@ export default function PracticeList({
             </div>
           </div>
         </details>
-      ))}
-      <p className="sr-only">
-        End of practices for {protocolShortTitle}.
-      </p>
+        );
+      })}
     </div>
   );
 }

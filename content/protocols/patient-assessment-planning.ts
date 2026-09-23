@@ -24,6 +24,42 @@ export const patientAssessmentPlanning: Protocol = {
   reviewTimeMinutes: 8,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "assess-patient",
+      title: "Assess the patient",
+      summary:
+        "What this animal brings to the case, established early enough that the plan can still change.",
+      practices: [
+        "patient-risk-factors",
+        "existing-infections",
+        "skin-disease",
+        "resistant-organisms",
+      ],
+    },
+    {
+      id: "assess-procedure",
+      title: "Assess the procedure",
+      summary:
+        "The risk the operation carries in its own right, independent of the patient.",
+      practices: [
+        "procedure-implant-risk",
+        "anticipated-duration",
+      ],
+    },
+    {
+      id: "plan-the-case",
+      title: "Plan the case",
+      summary:
+        "Turning the assessment into something the whole team can act on before the day.",
+      practices: [
+        "case-specific-planning",
+        "equipment-implant-availability",
+        "contingency-planning",
+        "team-briefing",
+      ],
+    },
+  ],
   practices: [
     {
       id: "patient-risk-factors",

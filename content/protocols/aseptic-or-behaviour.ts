@@ -23,6 +23,44 @@ export const asepticOrBehaviour: Protocol = {
   reviewTimeMinutes: 9,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "control-room",
+      title: "Control the room",
+      summary:
+        "Who is present, how much they move, and how often the door opens.",
+      practices: [
+        "room-occupancy",
+        "door-openings",
+        "movement",
+        "conversation",
+        "devices",
+      ],
+    },
+    {
+      id: "maintain-asepsis",
+      title: "Maintain asepsis",
+      summary:
+        "Knowing where the boundary is, and what counts as crossing it.",
+      practices: [
+        "sterile-nonsterile-boundaries",
+        "glove-contamination",
+        "glove-change-indications",
+      ],
+    },
+    {
+      id: "talk",
+      title: "Talk to each other",
+      summary:
+        "The practices every other protocol in the theatre depends on.",
+      practices: [
+        "communication-of-events",
+        "team-briefing",
+        "speaking-up",
+        "debriefing",
+      ],
+    },
+  ],
   practices: [
     {
       id: "room-occupancy",

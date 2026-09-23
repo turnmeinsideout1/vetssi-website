@@ -23,6 +23,53 @@ export const postoperativeWoundCare: Protocol = {
   reviewTimeMinutes: 9,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "protect",
+      title: "Protect the incision",
+      summary:
+        "The wound stays vulnerable in an environment nobody controls.",
+      practices: [
+        "initial-dressing",
+        "incision-protection",
+        "self-trauma-prevention",
+        "recovery-hygiene",
+      ],
+    },
+    {
+      id: "aseptic-handling",
+      title: "Handle the wound aseptically",
+      summary:
+        "Dressing changes are a procedure, not a task between other tasks.",
+      practices: [
+        "hand-hygiene-wound-handling",
+        "aseptic-wound-handling",
+      ],
+    },
+    {
+      id: "handover",
+      title: "Hand over to the owner",
+      summary:
+        "The person who will actually see the early signs.",
+      practices: [
+        "discharge-instructions",
+        "owner-education",
+      ],
+    },
+    {
+      id: "watch",
+      title: "Watch, and respond",
+      summary:
+        "Most surgical site infections present after discharge.",
+      practices: [
+        "wound-monitoring",
+        "remote-monitoring",
+        "concerning-signs",
+        "escalation",
+        "postoperative-stewardship",
+      ],
+    },
+  ],
   practices: [
     {
       id: "initial-dressing",

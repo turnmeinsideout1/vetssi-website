@@ -23,6 +23,50 @@ export const operatingTheatrePreparation: Protocol = {
   reviewTimeMinutes: 8,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "clean",
+      title: "Clean the room",
+      summary:
+        "Turnover and scheduled cleaning, to a written standard with observed contact times.",
+      practices: [
+        "cleaning-between-procedures",
+        "scheduled-cleaning",
+      ],
+    },
+    {
+      id: "environment",
+      title: "Control the environment",
+      summary:
+        "Airflow, movement and layout, decided before the case rather than during it.",
+      practices: [
+        "ventilation",
+        "traffic-planning",
+        "equipment-placement",
+      ],
+    },
+    {
+      id: "set-up",
+      title: "Set up for the case",
+      summary:
+        "Opening as late as practical, and keeping what is open attended.",
+      practices: [
+        "sterile-setup",
+        "implant-equipment-readiness",
+        "medication-preparation",
+      ],
+    },
+    {
+      id: "confirm",
+      title: "Confirm before the patient arrives",
+      summary:
+        "One explicit check, while findings can still be acted on.",
+      practices: [
+        "environmental-monitoring",
+        "readiness-check",
+      ],
+    },
+  ],
   practices: [
     {
       id: "cleaning-between-procedures",

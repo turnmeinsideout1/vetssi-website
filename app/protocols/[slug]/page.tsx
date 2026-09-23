@@ -6,6 +6,7 @@ import {
   getProtocol,
   getProtocols,
   getAdjacentProtocols,
+  getOrderedPractices,
 } from "@/content/protocols";
 import { stageBySlug } from "@/content/stages";
 import { getReferences } from "@/content/references";
@@ -198,7 +199,7 @@ export default function ProtocolPage({
             lead="These are the individual actions that meet the standard above. Each expands to show how to implement it, how it commonly fails, who is involved, and what the recommendation rests on."
           />
           <PracticeList
-            practices={protocol.practices}
+            groups={getOrderedPractices(protocol)}
             protocolShortTitle={protocol.shortTitle}
           />
         </section>

@@ -23,6 +23,52 @@ export const instrumentsImplantProtection: Protocol = {
   reviewTimeMinutes: 9,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "verify",
+      title: "Verify sterility",
+      summary:
+        "Evidence of sterilisation at the point of use, and the records to trace it.",
+      practices: [
+        "sterilization-verification",
+        "packaging-integrity",
+        "storage",
+      ],
+    },
+    {
+      id: "handle-instruments",
+      title: "Handle instruments",
+      summary:
+        "Opening, laying out and recognising when an instrument is no longer sterile.",
+      practices: [
+        "tray-opening",
+        "instrument-table",
+        "contaminated-instruments",
+      ],
+    },
+    {
+      id: "protect-implants",
+      title: "Protect implants",
+      summary:
+        "Opened last, touched least, placed immediately — and recorded.",
+      practices: [
+        "implant-exposure-time",
+        "implant-glove-change",
+        "no-touch-handling",
+        "implant-storage-transfer",
+      ],
+    },
+    {
+      id: "exceptions",
+      title: "Exceptions and failures",
+      summary:
+        "The processes that exist for when the normal one cannot be followed.",
+      practices: [
+        "immediate-use-sterilization",
+        "sterilization-failure-response",
+      ],
+    },
+  ],
   practices: [
     {
       id: "sterilization-verification",

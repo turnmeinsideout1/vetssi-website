@@ -22,6 +22,55 @@ export const surgicalTechniqueLavageClosure: Protocol = {
   reviewTimeMinutes: 10,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "tissue",
+      title: "Handle tissue well",
+      summary:
+        "Whether contamination that does reach the wound finds conditions it can grow in.",
+      practices: [
+        "gentle-tissue-handling",
+        "blood-supply",
+        "haemostasis",
+        "devitalized-tissue",
+        "dead-space",
+        "tissue-hydration",
+      ],
+    },
+    {
+      id: "conduct",
+      title: "Conduct of the procedure",
+      summary:
+        "Efficiency, stability and materials — the decisions that shape the wound environment.",
+      practices: [
+        "procedural-efficiency",
+        "stable-fixation",
+        "suture-handling",
+      ],
+    },
+    {
+      id: "lavage",
+      title: "Lavage",
+      summary:
+        "The mechanical effect is accepted; the additives are not settled. This site is product-neutral.",
+      practices: [
+        "mechanical-irrigation",
+        "lavage-selection",
+        "dwell-rinse-instructions",
+      ],
+    },
+    {
+      id: "closure",
+      title: "Closure",
+      summary:
+        "The field is still sterile until the dressing is on.",
+      practices: [
+        "preclosure-contamination",
+        "layered-closure",
+        "closure-field-management",
+      ],
+    },
+  ],
   practices: [
     {
       id: "gentle-tissue-handling",

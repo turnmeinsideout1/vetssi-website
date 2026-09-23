@@ -24,6 +24,45 @@ export const patientPreparation: Protocol = {
   reviewTimeMinutes: 12,
   reviewStatus: "draft",
   lastReviewed: null,
+  practiceGroups: [
+    {
+      id: "hair-removal",
+      title: "Hair removal",
+      summary:
+        "Removing hair without damaging the skin, and without leaving it where it can reach the wound.",
+      practices: [
+        "clipping-timing",
+        "clipping-technique",
+        "clipper-hygiene",
+        "hair-debris-removal",
+      ],
+    },
+    {
+      id: "antisepsis",
+      title: "Skin antisepsis",
+      summary:
+        "Reducing the bacterial burden at the site, by a documented process applied the same way every time.",
+      practices: [
+        "hand-glove-precautions",
+        "initial-skin-cleaning",
+        "antiseptic-selection",
+        "antiseptic-application",
+        "contact-time",
+        "final-sterile-prep",
+      ],
+    },
+    {
+      id: "to-theatre",
+      title: "Getting to theatre",
+      summary:
+        "Protecting what the preparation achieved, through transfer and positioning.",
+      practices: [
+        "transfer-protection",
+        "positioning",
+        "body-temperature",
+      ],
+    },
+  ],
   practices: [
     {
       id: "clipping-timing",
