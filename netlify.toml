@@ -1,0 +1,33 @@
+# Netlify build configuration for the VetSSI V2 site.
+#
+# This file lives on the `v2` branch and pins what the V1 site currently
+# resolves by auto-detection, so the build is reproducible rather than
+# dependent on what Netlify infers at build time.
+#
+# Deployed as its own Netlify site (vetssi-website-v2), separate from the
+# production site that serves vetssi.com from `main`.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  # Matches the Node major version used by the V1 site's build image.
+  NODE_VERSION = "20"
+
+# The Next.js runtime. Handles the App Router, the redirects declared in
+# next.config.mjs, and the edge-runtime OG image routes.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Indexing is opt-in. app/robots.ts and the metadata in app/layout.tsx both
+# read VETSSI_INDEXABLE and disallow crawling unless it is "true", so this
+# preview site stays out of search results while the clinical content is under
+# expert review. Set it only on the deploy that serves the canonical domain.
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"

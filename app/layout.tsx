@@ -58,11 +58,16 @@ export const metadata: Metadata = {
     description:
       "Four stages, twelve protocols, and the practices that implement them. An independent educational resource for veterinary surgical teams.",
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
-  },
+  // Kept in step with app/robots.ts: a non-canonical deploy of draft clinical
+  // content is not indexable.
+  robots:
+    process.env.VETSSI_INDEXABLE === "true"
+      ? {
+          index: true,
+          follow: true,
+          googleBot: { index: true, follow: true, "max-image-preview": "large" },
+        }
+      : { index: false, follow: false },
   alternates: {
     canonical: BASE_URL,
   },
