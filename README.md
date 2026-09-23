@@ -71,6 +71,22 @@ filter and OG images all follow.
 Practice `id`s are URL anchors (`#practice-<id>`) and are referenced by
 `content/redirects.mjs` — changing one breaks an inbound redirect from V1.
 
+### Practice groups
+
+Each protocol declares `practiceGroups`: labelled clusters that break a long
+run of practices into a few scannable sections. A group is an ordered list of
+practice ids, so **group order drives display order** — the `practices` array
+order is not what renders.
+
+Grouping is presentational only. Practices in one cluster frequently carry
+different evidence levels, roles and references, which is why they are grouped
+rather than merged.
+
+If you add a practice, add its id to a group. `validatePracticeGroups()` throws
+at module load — and therefore fails the build — on an id that matches no
+practice, a practice in no group, or a practice in two groups. Without that
+check an ungrouped practice would silently vanish from the page.
+
 ## Editorial rules this codebase enforces
 
 These are not style preferences. They are the reason the site can be trusted.
