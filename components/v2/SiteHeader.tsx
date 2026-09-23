@@ -5,21 +5,38 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, Search } from "lucide-react";
 
+// The three chronological stages sit under one Prevention Pathway tab, and
+// Measure & Improve stays beside it rather than inside it — it is the feedback
+// loop around the pathway, not its final phase. This mirrors PathwayDiagram,
+// which draws it as a band enclosing the other three.
 const primaryNav = [
   { href: "/mosaic", label: "The Mosaic" },
-  { href: "/pathway/before-surgery", label: "Before Surgery", match: "/pathway/before-surgery" },
-  { href: "/pathway/during-surgery", label: "During Surgery", match: "/pathway/during-surgery" },
-  { href: "/pathway/after-surgery", label: "After Surgery", match: "/pathway/after-surgery" },
-  { href: "/pathway/measure-improve", label: "Measure & Improve", match: "/pathway/measure-improve" },
-  { href: "/resources", label: "Resources" },
+  {
+    href: "/pathway",
+    label: "Prevention Pathway",
+    // Active for the hub and for the three chronological stages, but not for
+    // the loop, which has its own tab below.
+    isActive: (path: string) =>
+      path === "/pathway" ||
+      path.startsWith("/pathway/before-surgery") ||
+      path.startsWith("/pathway/during-surgery") ||
+      path.startsWith("/pathway/after-surgery") ||
+      path === "/protocols" ||
+      path.startsWith("/protocols/"),
+  },
+  { href: "/pathway/measure-improve", label: "Measure & Improve" },
+  { href: "/ssi-definitions", label: "SSI Definitions" },
   { href: "/about", label: "About VetSSI" },
 ];
 
 /** Reachable from within the architecture, not competing for primary nav space. */
 const secondaryNav = [
   { href: "/protocols", label: "All 12 protocols" },
+  { href: "/pathway/before-surgery", label: "Before Surgery" },
+  { href: "/pathway/during-surgery", label: "During Surgery" },
+  { href: "/pathway/after-surgery", label: "After Surgery" },
   { href: "/roles", label: "By role" },
-  { href: "/ssi-definitions", label: "SSI definitions" },
+  { href: "/resources", label: "Resources" },
 ];
 
 export default function SiteHeader() {
@@ -42,9 +59,9 @@ export default function SiteHeader() {
     return () => document.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
 
-  const isActive = (href: string, match?: string) => {
-    const target = match ?? href;
-    return pathname === target || pathname.startsWith(target + "/");
+  const isActive = (link: (typeof primaryNav)[number]) => {
+    if (link.isActive) return link.isActive(pathname);
+    return pathname === link.href || pathname.startsWith(link.href + "/");
   };
 
   return (
@@ -60,9 +77,9 @@ export default function SiteHeader() {
               VETSSI
             </Link>
 
-            <ul className="hidden xl:flex items-center gap-5 2xl:gap-6">
+            <ul className="hidden lg:flex items-center gap-5 2xl:gap-6">
               {primaryNav.map((link) => {
-                const active = isActive(link.href, link.match);
+                const active = isActive(link);
                 return (
                   <li key={link.href}>
                     <Link
@@ -90,7 +107,7 @@ export default function SiteHeader() {
               </li>
             </ul>
 
-            <div className="flex items-center gap-1 xl:hidden">
+            <div className="flex items-center gap-1 lg:hidden">
               <Link
                 href="/search"
                 aria-label="Search"
@@ -120,11 +137,11 @@ export default function SiteHeader() {
         {mobileOpen ? (
           <div
             id="mobile-nav"
-            className="xl:hidden bg-white border-t border-warm-gray max-h-[calc(100vh-4rem)] overflow-y-auto"
+            className="lg:hidden bg-white border-t border-warm-gray max-h-[calc(100vh-4rem)] overflow-y-auto"
           >
             <ul className="px-5 sm:px-6 py-4 flex flex-col">
               {primaryNav.map((link) => {
-                const active = isActive(link.href, link.match);
+                const active = isActive(link);
                 return (
                   <li key={link.href} className="border-b border-warm-gray/60 last:border-0">
                     <Link

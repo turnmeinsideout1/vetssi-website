@@ -3,6 +3,7 @@ import { stages } from "@/content/stages";
 
 const exploreLinks = [
   { href: "/mosaic", label: "The Mosaic" },
+  { href: "/pathway", label: "The prevention pathway" },
   { href: "/protocols", label: "All 12 protocols" },
   { href: "/roles", label: "Responsibilities by role" },
   { href: "/search", label: "Search" },
@@ -88,10 +89,20 @@ export default function SiteFooter() {
         </div>
 
         <div className="border-t border-white/10 pt-8 space-y-4">
-          <p className="text-sm text-[#F0C98A] leading-relaxed max-w-3xl">
-            VetSSI Version 2 is currently under expert review. Clinical content
-            should not yet be treated as a finalized guideline.
-          </p>
+          {/* Scoped deliberately. The twelve protocols are draft; the SSI
+              Definitions Framework is not — it derives from a published
+              international consensus. A blanket "everything is draft" line
+              would understate the one part of this site that is settled. */}
+          <div className="max-w-3xl space-y-2">
+            <p className="text-sm text-[#F0C98A] leading-relaxed">
+              The twelve prevention protocols are under expert review and should
+              not yet be treated as finalized guidelines.
+            </p>
+            <p className="text-sm text-white/60 leading-relaxed">
+              The SSI Definitions Framework is derived from a published
+              international expert consensus and is attributed to it throughout.
+            </p>
+          </div>
           <div className="flex flex-col md:flex-row justify-between gap-4">
             <p className="text-xs text-white/40 leading-relaxed max-w-2xl">
               This resource provides educational content for veterinary

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { stages } from "@/content/stages";
 import { getProtocolsByStage, protocols, practiceCount } from "@/content/protocols";
 import { mosaicTiles } from "@/content/mosaic";
+import { SOURCE } from "@/data/ssi-definitions";
 import {
   ButtonLink,
   Container,
@@ -257,6 +258,94 @@ export default function HomePage() {
             so each member of the team can see their own responsibilities across
             the whole pathway.
           </p>
+        </Container>
+      </section>
+
+      {/* ─── The consensus foundation ─────────────────────────────────────── */}
+      <section className="py-16 sm:py-24 border-b border-warm-gray bg-white">
+        <Container>
+          <div className="grid lg:grid-cols-[1fr,1.05fr] gap-12 lg:gap-16 items-start">
+            <div>
+              <SectionHeading
+                eyebrow="Shared terminology"
+                title="Built on an international expert consensus"
+              />
+              <div className="space-y-4 text-text-primary leading-relaxed prose-measure">
+                <p>
+                  Surgical site infection rates cannot be compared &mdash;
+                  between hospitals, or within one hospital over time &mdash;
+                  unless everyone is counting the same thing. Until recently,
+                  veterinary medicine had no agreed definition of what counted.
+                </p>
+                <p>
+                  {SOURCE.method} published in the{" "}
+                  {SOURCE.journal} changed that. {SOURCE.panelDescription} They
+                  agreed {SOURCE.definitionsAgreed} definitions covering the
+                  tissue-layer classifications of surgical site infection,
+                  surgical wound classification, surveillance terms and
+                  antimicrobial periods &mdash; {SOURCE.standing.toLowerCase()}
+                </p>
+                <p>
+                  VetSSI&rsquo;s SSI Definitions Framework is built directly on
+                  that consensus, and attributes it throughout. It is the
+                  foundation of Protocol 11, SSI Surveillance, and the reason
+                  that protocol carries more evidentiary weight than any other
+                  on this site.
+                </p>
+              </div>
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                <ButtonLink href="/ssi-definitions">
+                  Explore the SSI Definitions Framework
+                </ButtonLink>
+              </div>
+            </div>
+
+            <figure className="border border-warm-gray bg-cream/50 p-6 sm:p-8">
+              <figcaption className="eyebrow text-steel mb-4">
+                The source
+              </figcaption>
+              <blockquote className="font-serif text-xl sm:text-2xl text-navy leading-snug mb-5">
+                {SOURCE.title}
+              </blockquote>
+              <p className="text-sm text-text-muted leading-relaxed mb-5">
+                {SOURCE.authors} <br />
+                <span className="italic">{SOURCE.journal}</span>, {SOURCE.year}.
+              </p>
+
+              <dl className="border-t border-warm-gray divide-y divide-warm-gray text-sm mb-6">
+                <div className="flex justify-between gap-4 py-2.5">
+                  <dt className="text-text-muted">Method</dt>
+                  <dd className="text-navy text-right">{SOURCE.method}</dd>
+                </div>
+                <div className="flex justify-between gap-4 py-2.5">
+                  <dt className="text-text-muted">Expert panel</dt>
+                  <dd className="text-navy text-right">
+                    {SOURCE.panelSize} specialists
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4 py-2.5">
+                  <dt className="text-text-muted">Definitions agreed</dt>
+                  <dd className="text-navy text-right">
+                    {SOURCE.definitionsAgreed}
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4 py-2.5">
+                  <dt className="text-text-muted">Access</dt>
+                  <dd className="text-navy text-right">{SOURCE.license}</dd>
+                </div>
+              </dl>
+
+              <a
+                href={SOURCE.doiUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-steel underline underline-offset-2 hover:text-navy break-all"
+              >
+                doi:{SOURCE.doi}
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </figure>
+          </div>
         </Container>
       </section>
 

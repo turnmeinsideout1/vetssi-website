@@ -18,6 +18,22 @@ export const SOURCE = {
   journalUrl: "https://avmajournals.avma.org/view/journals/ajvr/87/3/ajvr.25.03.0099.xml",
   pdfUrl: "https://avmajournals.avma.org/downloadpdf/view/journals/ajvr/87/3/ajvr.25.03.0099.pdf",
   license: "Open Access — CC BY-NC",
+
+  // Provenance of the consensus. Restored from the VetSSI V1 publication
+  // record (data/resources.ts on `main`), which was lost when that file was
+  // removed during the V2 migration. These are the paper's own descriptors,
+  // not VetSSI editorial claims.
+  method: "International Delphi consensus",
+  panelSize: 32,
+  panelDescription:
+    "A multidisciplinary panel of 32 expert specialists spanning surgery, internal medicine, anaesthesia, critical care, dentistry, microbiology, preventive medicine, animal welfare, and human infection control.",
+  definitionsAgreed: 18,
+  scope:
+    "18 definitions spanning superficial, deep, organ/space, and implant-associated SSIs, surgical wound classification, surgical procedure types, surveillance terms, and antimicrobial periods.",
+  standing:
+    "The first standardized terminology for surgical site infections in veterinary medicine.",
+  abstract:
+    "An international Delphi consensus that establishes the first standardized terminology for surgical site infections in veterinary medicine. A multidisciplinary panel of 32 expert specialists agreed 18 definitions spanning superficial, deep, organ/space, and implant-associated SSIs, surgical wound classification, surgical procedure types, surveillance terms, and antimicrobial periods. The foundational reference for the VetSSI SSI Definitions Framework. Open Access (CC BY-NC).",
 } as const;
 
 // Shared clinical-sign set used across all three tissue-layer

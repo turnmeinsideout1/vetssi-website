@@ -42,10 +42,10 @@ const entryCards = [
     icon: Activity,
   },
   {
-    href: "/contamination-pathways",
-    title: "Contamination Pathways",
-    body: "The eight pathways through which infection enters the surgical field — the system these definitions describe and prevent. Cross-linked from every Core Definition.",
-    cta: "Open pathways",
+    href: "/mosaic",
+    title: "The Mosaic of SSI Prevention",
+    body: "The areas of surgical care through which infection reaches the surgical site — the system these definitions describe and that the twelve protocols act on. Cross-linked from every Core Definition.",
+    cta: "Open the Mosaic",
     icon: GitBranch,
   },
 ];
@@ -57,6 +57,71 @@ export default function SsiDefinitionsLandingPage() {
         title="SSI Definitions Framework"
         subtitle="Standardized veterinary terminology for classifying, monitoring, and preventing surgical site infections."
       />
+
+      {/* Provenance. This is the one part of VetSSI that derives from a
+          published expert consensus rather than from draft editorial content,
+          and it says so before anything else on the page. */}
+      <section className="bg-navy text-white">
+        <div className="max-w-5xl mx-auto px-6 lg:px-8 py-10 sm:py-12">
+          <p className="eyebrow text-steel-light mb-4">
+            The source of this framework
+          </p>
+          <div className="grid lg:grid-cols-[1.3fr,1fr] gap-8 lg:gap-12 items-start">
+            <div>
+              <p className="font-serif text-2xl sm:text-3xl leading-snug mb-4">
+                {SOURCE.title}
+              </p>
+              <p className="text-sm text-white/70 leading-relaxed mb-4">
+                {SOURCE.authors} &middot;{" "}
+                <span className="italic">{SOURCE.journal}</span>, {SOURCE.year}
+              </p>
+              <p className="text-sm text-white/70 leading-relaxed">
+                {SOURCE.panelDescription}
+              </p>
+            </div>
+
+            <dl className="border-t border-white/15 divide-y divide-white/15 text-sm">
+              <div className="flex justify-between gap-4 py-2.5">
+                <dt className="text-white/50">Method</dt>
+                <dd className="text-right">{SOURCE.method}</dd>
+              </div>
+              <div className="flex justify-between gap-4 py-2.5">
+                <dt className="text-white/50">Expert panel</dt>
+                <dd className="text-right">{SOURCE.panelSize} specialists</dd>
+              </div>
+              <div className="flex justify-between gap-4 py-2.5">
+                <dt className="text-white/50">Definitions agreed</dt>
+                <dd className="text-right">{SOURCE.definitionsAgreed}</dd>
+              </div>
+              <div className="flex justify-between gap-4 py-2.5">
+                <dt className="text-white/50">Access</dt>
+                <dd className="text-right">{SOURCE.license}</dd>
+              </div>
+              <div className="flex justify-between gap-4 py-2.5">
+                <dt className="text-white/50">DOI</dt>
+                <dd className="text-right">
+                  <a
+                    href={SOURCE.doiUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-steel-light underline underline-offset-2 hover:text-white break-all"
+                  >
+                    {SOURCE.doi}
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <p className="text-sm text-white/50 leading-relaxed mt-8 max-w-3xl border-t border-white/10 pt-6">
+            Content marked as consensus paraphrases the paper&rsquo;s defined
+            terms. VetSSI&rsquo;s own clinical interpretation, gray zones,
+            misclassification scenarios and examples are editorial and are
+            labelled as such throughout this module.
+          </p>
+        </div>
+      </section>
 
       {/* Intro */}
       <section className="bg-white border-b border-warm-gray">
